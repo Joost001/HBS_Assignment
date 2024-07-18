@@ -74,20 +74,10 @@ def map_at_k(true_ids, predicted_ids, k=10):
 
 # Please add any new evaluation functions here
 
-# get search queries
-query_df = pd.read_csv("WANDS/dataset/query.csv", sep='\t')
 
-query_df.head()
-
-# get products
-product_df = pd.read_csv("WANDS/dataset/product.csv", sep='\t')
-
-product_df.head()
-
-# get manually labeled groundtruth lables
-label_df = pd.read_csv("WANDS/dataset/label.csv", sep='\t')
-
-label_df.head()
+query_df = pd.read_csv("WANDS/dataset/query.csv", sep='\t')  # get search queries
+product_df = pd.read_csv("WANDS/dataset/product.csv", sep='\t')  # get products
+label_df = pd.read_csv("WANDS/dataset/label.csv", sep='\t')  # get manually labeled ground truth labels
 
 # group the labels for each query to use when identifying exact matches
 grouped_label_df = label_df.groupby('query_id')
@@ -105,12 +95,12 @@ def get_top_product_ids_for_query(query):
 
 
 # define the test query
-query = "armchair"
+armchair_query = "armchair"
 
 # obtain top product IDs
-top_product_ids = get_top_product_ids_for_query(query)
+top_product_ids = get_top_product_ids_for_query(armchair_query)
 
-print(f"Top products for '{query}':")
+print(f"Top products for '{armchair_query}':")
 for product_id in top_product_ids:
     product = product_df.loc[product_df['product_id'] == product_id]
     print(product_id, product['product_name'].values[0])
@@ -133,4 +123,4 @@ query_df['relevant_ids'] = query_df['query_id'].apply(get_exact_matches_for_quer
 query_df['map@k'] = query_df.apply(lambda x: map_at_k(x['relevant_ids'], x['top_product_ids'], k=10), axis=1)
 
 # calculate the MAP across the entire query set
-query_df.loc[:, 'map@k'].mean()
+print(query_df.loc[:, 'map@k'].mean())
