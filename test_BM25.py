@@ -35,7 +35,8 @@ class EcommerceSearchEngine:
             self.stop_words = None
         self.preprocess_documents()
 
-    def get_synonyms(self, word):
+    @staticmethod
+    def get_synonyms(word):
         from nltk.corpus import wordnet
         synonyms = set()
         for syn in wordnet.synsets(word):
@@ -85,7 +86,8 @@ class EcommerceSearchEngine:
         Parameters:
         true_ids (list): List of relevant product IDs.
         predicted_ids (list): List of predicted product IDs.
-        true_labels (list): List of labels corresponding to the true_ids ("Exact", "Partial", "Irrelevant"). Required if partial_matches is True.
+        true_labels (list): List of labels corresponding to the true_ids ("Exact", "Partial", "Irrelevant"). Required
+                            if partial_matches is True.
         k (int): Number of top elements to consider.
         partial_matches (bool): Whether to consider partial matches in the scoring.
 
@@ -112,7 +114,6 @@ class EcommerceSearchEngine:
                 else:
                     num_hits += 1.0
                 score += num_hits / (i + 1.0)
-
         return score / min(len(true_ids), k)
 
 
